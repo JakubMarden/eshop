@@ -13,25 +13,30 @@
         <meta name="author" content="Josef Jakub Jestřáb"/>
         <meta name="copyright" content="(c) 2016 VIZUS.CZ s.r.o."
         <meta name="Robots" content="all"/>
-        
-        <script type="text/javascript" src="js/core.js"></script>
+       
     </head>
     <body>
         <div id = header>
             <h1 class = "nor">Vizus E-shop</h1><br />
             <?php 
                 @session_start();
-                
+                //unset($_SESSION["cart_products"]);
+                include('../model/Database.php');
+                $db = Database::__getInstance();
+
+                //$_SESSION["info"] zobrazuje vysledek operaci, paklize se nejake udaly
                 if((isset($_SESSION["info"])) && (!empty($_SESSION["info"]))){ ?>                 
                     <div id = "info"><p><?php echo $_SESSION["info"]; ?></p></div>
                 <?php } 
                 
                 if(isset($_SESSION["info"])){ $_SESSION["info"] = null;}
                 
+                //generuje csrf token pro formulare
                 if (!isset($_SESSION["csrf_token"])) {
                     $_SESSION["csrf_token"] = rand(1, 1e9);
                 }
                 
+                //zjistuje GET hodnoty, ktere urcuji, jaky obsah zobrazit
                 $detail_id = filter_input(INPUT_GET, 'detail_id');
                 $cart_detail = filter_input(INPUT_GET, 'cart_detail');
                 
@@ -39,15 +44,24 @@
         </div>            
             <div class = "w100" id = "main">
                 <div id = "content">
-                    <div class = "fright"><a href = "kosik/" title ="přejít do košíku">Košík</a></div>
                     
-                    <?php 
+                    
+                    <?php //vklada obsah stranek na zaklade GET hodnot
                     if(isset($detail_id))
+                    {
+                        $source = "detail";
                         include('../view/detail.php');
+                    }
                     elseif (isset($cart_detail)) 
+                    {
+                        $source = "kosik";
                         include('../view/cart.php');  
-                    else 
+                    }
+                    else
+                    {
+                        $source = "list";
                         include('../view/list.php');                    
+                    }    
                     ?>
                     
                 </div>    

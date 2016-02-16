@@ -1,64 +1,72 @@
 <?php
+require(dirname(__FILE__).'/'.'BaseController.php'); 
 
 /**
- * Description of BasketItem
+ * CartItemController obsluhuje zmenu dat v kosiku u jedne polozky
  *
  * @author vizus.jestrab
  */
 
-class CartItemController {
+class CartItemController extends BaseController
+{
     
-    private $data;
+    /** @var int id produktu. */
     private $id;
+    
+    /** @var int mnozstvi objednavaneho produktu. */
     private $quantity;
+    
+     /** @var string hlaska, ktera bude zobrazena zakaznikovi. */
     public $info;
-    private $db;
     
-    
-    public function __construct(Database $db)
-    {
-        @session_start();
-        $this->db = $db;
-        $this->data = filter_input_array(INPUT_POST);
-        if($this->data)
-            $this->updateCartCheck();
-    }
-    
-    private function updateCartCheck()
-    {
-        if(intval($this->data["csrf_token"]) !== $_SESSION["csrf_token"])        
-            $this->info = "Produkt se nepovedlo vložit do košíku. Prosím obnovte stránku a zkuste to znovu.";        
-        else
-            $this->updateCart();
-    }
-    
-    private function updateCart()
+     /** @var string obsahuje info z jake stranky data prisla. */
+    public $source;
+        
+       
+    /**
+    * dela samotnou zmenu v kosiku
+    */
+    protected function init()
     {
         
         $this->quantity = intval($this->data['quantity']);
         $this->id = intval($this->data['id']);        
         
-        if($this->quantity === 0){
+        //odebrani z kosiku
+        if($this->quantity === 0)
+        {
             unset($_SESSION["cart_products"][$this->id]);
-            $this->info = "produkt byl odebrán z košíku";
+            $this->info = "Produkt byl odebrán z košíku.";
+            header('Location: /kosik/');
             exit;
         }            
         
+        //pridani nebo uprava poctu kusu v kosiku
         if(!isset($_SESSION["cart_products"][$this->id]))
         {
-            $product = $this->db->getRowByID("product", $this->id);
-            $_SESSION["cart_products"][$this->id] = $product;         
+            $product = parent::$db->getRowByID("product", $this->id);
+            if(!empty($product)){
+                $_SESSION["cart_products"][$this->id] = $product;         
+            }
         }   
         
         $_SESSION["cart_products"][$this->id]["quantity"] = $this->quantity;
-        $this->info = "produkt byl přidán do košíku";
+        $this->source = $this->data['source']; 
+        
+        if($this->data['source'] === "kosik")
+            $this->info = "Počet byl upraven.";
+        else
+            $this->info = "Produkt byl přidán do košíku.";
     }
 }
 
-include('../model/Database.php');
-$db = new Database;
-$cart_item = new CartItemController($db);
+$cart_item = new CartItemController();
 
 $_SESSION["info"] = $cart_item->info;
-header('Location: /');
+
+if($cart_item->source === "kosik")
+    header('Location: /kosik/');     
+else
+    header('Location: /');  
+
 exit;

@@ -1,7 +1,6 @@
 <?php
 
 /**
- * Description of database
  * Database model pro controlery
  *
  * @author vizus.jestrab
@@ -9,14 +8,30 @@
 
 class Database
 {  
+    /** @var string host pripojeni. */
     private $host;
+    
+    /** @var string uzivatelske jmeno pro  pripojeni k databazi. */
     private $user;
+    
+    /** @var string uzivatelske heslo pro  pripojeni k databazi. */
     private $pass;
+    
+    /** @var string nazev databaze. */
     private $dbname;
  
+    /** @var Database pripojeni. */
     private $db;
+    
+    /** @var Database instance. */
+    private static $instance = false;
+    
+    /** @var pomocna promenna pro pripojeni k datum */
     private $stmt;
+    
+    /** @var exception chybova hlaska v pripade neuspechu. */
     private $error;
+    
  
     public function __construct()
     {
@@ -42,6 +57,20 @@ class Database
         }
     }
     
+    public static function __getInstance()
+    {
+      if(self::$instance === false){
+        self::$instance = new Database;
+      }
+      return self::$instance;
+    }
+    
+    
+    /**
+    *  metoda pro reseni obecnych dotazu, na ktere se nehodi dalsi metody
+    * @param    string   $query
+    * @return   $array
+    */
     public function query($query)
     {
         try{
@@ -57,6 +86,12 @@ class Database
         }
     }
     
+    /**
+    *  metoda pro hledani konkretnich radku podle id
+    * @param    string   $table nazev tabulky
+    * @param    id   $id
+    * @return   $array
+    */
     public function getRowByID($table, $id)
     {
         try{
@@ -72,6 +107,11 @@ class Database
         }
     }
     
+    /**
+    *  metoda pro vraceni cele tabulky
+    * @param    string   $table nazev tabulky
+    * @return   $array
+    */
     public function getAllActive($table)
     {
         try{
@@ -87,12 +127,21 @@ class Database
         }
     }
     
-    public function insertRow($table, $array)
+    /**
+    *  metoda pro vraceni nejvyssiho idcka
+    * @param    string   $table nazev tabulky
+    * @return   int
+    */
+    public function getMaxId($table)
     {
         try{
-            $this->stmt = $this->db->prepare("INSERT INTO `{$table}` (`".implode('`, `',array_keys($array)).'`) VALUES ("' . implode('", "', $array) . '")');
+            $this->stmt = $this->db->prepare("SELECT MAX(id) FROM `{$table}`");
             $this->stmt->execute();
-            return true;
+            $result = $this->stmt->fetch(PDO::FETCH_ASSOC);
+            if(empty($result['MAX(id)'])){
+                $result = 0;
+            }
+            return $result['MAX(id)'];
         } 
         
         catch (PDOException $e)
@@ -102,6 +151,31 @@ class Database
         }
     }
     
+    /**
+    *  metoda pro vlozeni obshu do tabulky
+    * @param    string   $table nazev tabulky
+    * @param    array   $array asociativni pole pro pridani hodnot
+    * @return   boolean
+    */
+    public function insertRow($table, $array)
+    {
+        try{
+            $this->stmt = $this->db->prepare("INSERT INTO `{$table}` (`".implode('`, `',array_keys($array)).'`) VALUES ("' . implode('", "', $array) . '")');
+            $this->stmt->execute();
+            
+            return true;
+        } 
+        
+        catch (PDOException $e)
+        {
+            $this->error = $e->getMessage();
+            return false;
+        }
+    }
+    
+    /**
+    *  metoda pro ukonceni relace
+    */
     public function CloseConnection()
     {
         $this->db = null;
@@ -118,7 +192,7 @@ $array = ["name"=>"sada snadno a rychle",
             "image_file"=>"ductape.jpg",
             "active"=>1,
             "mount"=>"5 ks"];
-$customer = $db->insertRow("product", $array);
-var_dump($customer);*/
+$insert = $db->insertRow("product", $array);
+var_dump($insert);*/
 
 

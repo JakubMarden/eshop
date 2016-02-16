@@ -1,10 +1,7 @@
 <?php
-
-include('../model/Database.php');
-$db = new Database;
 $products = $db->getAllActive("product");
 ?>  
-
+<div class = "fright"><a href = "kosik/" title ="přejít do košíku">Košík</a></div>
 <h2>Produkt list</h2>
 <table>
     <thead>

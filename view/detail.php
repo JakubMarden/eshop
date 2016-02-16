@@ -1,13 +1,10 @@
 <?php
-
-include('../model/Database.php');
-$db = new Database;
 $product = $db->getRowByID("product",$detail_id);
 $image_file = "/photos/".$product['image_file'];
 
 
 ?>  
-
+<div class = "fright"><a href = "/kosik/" title ="přejít do košíku">Košík</a></div>
 <h2>Detail produktu</h2>
 <div>
     <?php echo "produkt kód: " .$product["id"] ?><br />
