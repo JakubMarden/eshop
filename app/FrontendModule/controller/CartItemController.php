@@ -1,6 +1,4 @@
 <?php
-require(dirname(__FILE__).'/'.'BaseController.php'); 
-
 /**
  * CartItemController obsluhuje zmenu dat v kosiku u jedne polozky
  *

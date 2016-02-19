@@ -15,6 +15,6 @@ $image_file = "/photos/".$product['image_file'];
     <?php echo "množství v balení: " .$product["mount"] ?><br />
     <?php if(file_exists($image_file)) echo "<img src = '$image_file' alt = 'obrázek produktu'/>" ?><br />
     
-    <?php include('../forms/cartItemUpdateForm.php')?>
+    <?php include('/forms/cartItemUpdateForm.php')?>
 </div>
 

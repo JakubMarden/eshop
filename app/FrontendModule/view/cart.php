@@ -30,8 +30,8 @@
                 <td><?php echo $product["quantity"] ?></td> 
                 <td><?php echo $item_price." Kč" ?></td>
                 
-                <td><?php include('../forms/cartItemUpdateForm.php')?></td>
-                <td><?php include('../forms/cartItemDeleteForm.php')?></td>
+                <td><?php include('/forms/cartItemUpdateForm.php')?></td>
+                <td><?php include('/forms/cartItemDeleteForm.php')?></td>
             </tr>    
         <?php } //endforeach ?>
             
@@ -42,7 +42,7 @@
 </table><br/>
 
 <h2>Objednávací údaje</h2>
-<?php include('../forms/cartOrderForm.php');
+<?php include('/forms/cartOrderForm.php');
 }
 else
     echo "<p>Nebyly zatím vybrány žádné produkty.</p>"

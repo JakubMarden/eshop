@@ -85,19 +85,19 @@ class OrderItemController extends BaseController
     */
     private function insertOrder()
     {
-        $max_id  = parent::$db->getMaxId("order");
+        $max_id  = intval(parent::$db->getMaxId("order"));
         $max_id++;
-        $id = sprintf("%'.06d\n", $max_id);
               
         $this->order = array(
-            "id" => $id,
+            "id" => $max_id,
             "customer_id" => $this->customer['id'],
             "status" => "nova",
             "shipping_method" => $this->data['shipping_method'],
             "payment_method" => $this->data['payment_method'],
             "shipping_price" => $this->shipping_price,
             "payment_price" => $this->payment_price,
-            "sum_price" => $this->sum_price
+            "sum_price" => $this->sum_price,
+            "message" => $this->data['message']
         );
         
         $save_order_result = parent::$db->insertRow("order", $this->order); 
@@ -157,14 +157,11 @@ class OrderItemController extends BaseController
         
         $this->sum_price = round($this->sum_price + $this->payment_price + $this->shipping_price);    
     }
-    
-    public function __destruct() {
-        unset($_SESSION["cart_products"]);
-        $_SESSION["info"] = $this->info = "Objednávka je uložena, děkujeme za nákup v našem e-shopu.";
-        header('Location: /');  
-        exit;
-    }
 }
 
-new OrderItemController();
+$orderItem =  new OrderItemController();
 
+unset($_SESSION["cart_products"]);
+$_SESSION["info"] = $orderItem->info = "Objednávka je uložena, děkujeme za nákup v našem e-shopu.";
+header('Location: /');  
+exit;

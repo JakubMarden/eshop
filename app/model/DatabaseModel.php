@@ -6,7 +6,7 @@
  * @author vizus.jestrab
  */
 
-class Database
+class DatabaseModel
 {  
     /** @var string host pripojeni. */
     private $host;
@@ -35,8 +35,6 @@ class Database
  
     public function __construct()
     {
-        require_once '../scripts/common/config.php';
-        
         $this->host      = CONFIG_HOST;
         $this->user      = CONFIG_USER;
         $this->pass      = CONFIG_PASSWORD;
@@ -60,7 +58,7 @@ class Database
     public static function __getInstance()
     {
       if(self::$instance === false){
-        self::$instance = new Database;
+        self::$instance = new DatabaseModel;
       }
       return self::$instance;
     }
@@ -184,7 +182,7 @@ class Database
 
 
 
-/*$db = new Database;
+/*$db = new DatabaseModel;
 $array = ["name"=>"sada snadno a rychle",
             "description"=>"univerzální sada na opravu čehokoliv, osvědčená miliony lidí, levná a univerzální, výhodné balení po 5 kusech",
             "price"=>54.9,

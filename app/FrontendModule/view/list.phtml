@@ -1,6 +1,3 @@
-<?php
-$products = $db->getAllActive("product");
-?>  
 <div class = "fright"><a href = "kosik/" title ="přejít do košíku">Košík</a></div>
 <h2>Produkt list</h2>
 <table>
@@ -21,7 +18,7 @@ $products = $db->getAllActive("product");
                 <td><?php echo $product["mount"] ?></td>
                 <td><?php echo "<a href = \" /detail/$product[id]\">detail produktu</a>" ?></td>
                 <td>    
-                    <?php include('../forms/cartItemUpdateForm.php')?>
+                    <?php include('/../../forms/cartItemUpdateForm.phtml')?>
                 </td>
             </tr>    
         <?php } //endforeach ?>
@@ -29,4 +26,3 @@ $products = $db->getAllActive("product");
         </tr>        
     </thead>
 </table>
-

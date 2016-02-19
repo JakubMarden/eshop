@@ -1,6 +1,15 @@
+Options -Indexes
+
 RewriteEngine on
-RewriteRule    "^detail/(.*)"    "index.php?detail_id=$1"
-RewriteRule    "^kosik/"         "index.php?cart_detail=1"
-RewriteRule    "^kosik-polozka/"    "cartItem.php"
-RewriteRule    "^objednavka/"    "orderItem.php"
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule !\.(css|js|icon|zip|rar|png|jpg|gif|pdf)$ index.php [L]
+
+AddType application/x-httpd-php .php .phtml
+#RewriteRule    "^detail/(.*)"    "index.php?detail_id=$1"
+#RewriteRule    "^kosik/"         "index.php?cart_detail=1"
+#RewriteRule    "^kosik-polozka/"    "controller/CartItemController.php"
+#RewriteRule    "^objednavka/"    "controller/OrderItemController.php"
 
