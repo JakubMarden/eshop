@@ -158,15 +158,23 @@ class DatabaseModel
     public function insertRow($table, $array)
     {
         try{
-            $this->stmt = $this->db->prepare("INSERT INTO `{$table}` (`".implode('`, `',array_keys($array)).'`) VALUES ("' . implode('", "', $array) . '")');
-            $this->stmt->execute();
+            $this->stmt = $this->db->prepare("INSERT INTO `{$table}` (`".implode('`, `',array_keys($array)).'`) VALUES (:' . implode(', :', array_keys($array)) . ')');
+            
+            foreach ($array as $key => $value) {
+                $new_key = ":".$key;
+                $pdo_array[$new_key] = $value;
+            }
+            
+            $this->stmt->execute($pdo_array);
             
             return true;
         } 
         
         catch (PDOException $e)
         {
+            
             $this->error = $e->getMessage();
+            var_dump($this->stmt->queryString,$this->error, $pdo_array);exit;
             return false;
         }
     }
