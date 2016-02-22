@@ -14,6 +14,7 @@ class Router
     private $directoryFrontendName = 'FrontendModule';
     
     private $directoryAdminName = 'AdminModule';
+    
 
     public function route($url)
     {
@@ -27,6 +28,7 @@ class Router
         $parsedUrl = parse_url($url);
         $parsedUrl["path"] = ltrim($parsedUrl["path"], "/");
         $parsedUrl["path"] = trim($parsedUrl["path"]);   
+        
         return $choppedUrl = explode("/", $parsedUrl["path"]);       
     }
     
@@ -35,7 +37,7 @@ class Router
         $controller_class_name = ($this->module .$this->controller);
         $controller_path = CONFIG_PHP_ROOT .$this->module .'controller/' . $this->controller . '.php';
         $method = $this->method;
-
+        
         if (file_exists($controller_path))
         {
             $instance = new $controller_class_name();
@@ -45,8 +47,8 @@ class Router
                 $instance->$method($this->parameters);
             }
             elseif((method_exists($instance, $method)) and (!isset($this->parameters))) 
-            {               
-                $instance->$method();
+            {     
+                $instance->$method();                
             }
             else
                 $this->redirect('error/error/404'); 
@@ -55,8 +57,6 @@ class Router
             $this->redirect('error/error/404'); 
 
     }        
-
-
     
     private function setComponents($choppedUrl)
     {   
@@ -77,17 +77,14 @@ class Router
         {
             $this->module = "";
         }
-        include(CONFIG_PHP_ROOT .'scripts/common/routeConfig.php');
-        foreach ($routeArray as $key => $value) {
-            if($key === $choppedUrl[0])
-                $choppedUrl[0] = $value;
-        }
+        
+        $choppedUrl = $this->checkRouteRedirect($choppedUrl);
         
         $this->controller = $this->stringToCamelCase(array_shift($choppedUrl)) . 'Controller';
         if($this->controller === "Controller")
              $this->controller = "HomeController";
         
-        if(isset($choppedUrl[0]))
+        if((isset($choppedUrl[0])) and (!empty($choppedUrl[0])))
             $this->method = lcfirst($this->stringToCamelCase(array_shift($choppedUrl)));
         else
             $this->method = "actionDefault";
@@ -104,10 +101,30 @@ class Router
         return $name;
     }
     
+    private function checkRouteRedirect($choppedUrl)
+    { 
+        include(CONFIG_PHP_ROOT .'scripts/common/routeConfig.php');
+        
+        foreach ($routeArray as $key => $value) {
+            $choppedKeyUrl = explode("/", $key);
+            $choppedValueUrl = explode("/", $value);
+            if($choppedUrl[0] === $choppedKeyUrl[0])
+            {                          
+                $keyLenght = count($choppedKeyUrl);
+
+                for($i = 0; $i < $keyLenght; $i++)
+                {
+                   if($choppedUrl[$i] === $choppedKeyUrl[$i])
+                       $choppedUrl[$i] = $choppedValueUrl[$i];
+                }
+            }
+        }
+
+        return $choppedUrl;
+    }
+    
     public function redirect($url)
     {
-        header("Location: /$url");
-        header("Connection: close");
-        exit;
+        $this->route($url);
     }
 }

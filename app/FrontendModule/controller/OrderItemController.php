@@ -1,5 +1,6 @@
 <?php
-require(dirname(__FILE__).'/'.'BaseController.php'); 
+
+namespace FrontendModule;
 
 /**
  * OrderItemController obsluhuje ulozeni objednavky z kosiku
@@ -30,21 +31,26 @@ class OrderItemController extends BaseController
     
     /** @var int celkova cena. */
     private $sum_price;
-    
+
+    public function __construct() {
+        parent::__construct();
+    }    
     
     /**
     * uklada objednavku
     */
-   protected function init()
-   {
-        //
-        
+   public function actionDefault()
+   {        
         $this->insertCustomer();
             
         $this->setPricesAndProducts();
         $this->insertOrder();
         
         $this->insertProductsInOrder();
+        
+        unset($_SESSION["cart_products"]);
+        $_SESSION["info"] = $this->info = "Objednávka je uložena, děkujeme za nákup v našem e-shopu.";
+        $this->redirect('kosik/'); 
     }
     
     /**
@@ -59,13 +65,13 @@ class OrderItemController extends BaseController
 
         $this->customer = array(
             "id" => $max_id,
-            "name" => $this->data['name'],
-            "surname" => $this->data['surname'],
-            "email" => $this->data['email'],
-            "phone" => $this->data['phone'],
-            "street" => $this->data['street'],
-            "city" => $this->data['city'],
-            "zip" => $this->data['zip']
+            "name" => $this->post_data['name'],
+            "surname" => $this->post_data['surname'],
+            "email" => $this->post_data['email'],
+            "phone" => $this->post_data['phone'],
+            "street" => $this->post_data['street'],
+            "city" => $this->post_data['city'],
+            "zip" => $this->post_data['zip']
         );
          
         $save_customer_result = parent::$db->insertRow("customer", $this->customer); 
@@ -73,8 +79,7 @@ class OrderItemController extends BaseController
         if($save_customer_result === false)
         {
             $_SESSION["info"] = $this->info = "Objednávku se nepovedlo uložit. Zkuste to prosím znovu.";
-            header('Location: /kosik/');  
-            exit;
+            $this->redirect('kosik/');  
         }
     }
     
@@ -92,12 +97,12 @@ class OrderItemController extends BaseController
             "id" => $max_id,
             "customer_id" => $this->customer['id'],
             "status" => "nova",
-            "shipping_method" => $this->data['shipping_method'],
-            "payment_method" => $this->data['payment_method'],
+            "shipping_method" => $this->post_data['shipping_method'],
+            "payment_method" => $this->post_data['payment_method'],
             "shipping_price" => $this->shipping_price,
             "payment_price" => $this->payment_price,
             "sum_price" => $this->sum_price,
-            "message" => $this->data['message']
+            "message" => $this->post_data['message']
         );
         
         $save_order_result = parent::$db->insertRow("order", $this->order); 
@@ -105,8 +110,7 @@ class OrderItemController extends BaseController
         if($save_order_result === false)
         {
             $_SESSION["info"] = $this->info = "Objednávku se nepovedlo uložit. Zkuste to prosím znovu.";
-            header('Location: /kosik/');  
-            exit;
+            $this->redirect('kosik/'); ;
         }       
     }
     
@@ -158,10 +162,3 @@ class OrderItemController extends BaseController
         $this->sum_price = round($this->sum_price + $this->payment_price + $this->shipping_price);    
     }
 }
-
-$orderItem =  new OrderItemController();
-
-unset($_SESSION["cart_products"]);
-$_SESSION["info"] = $orderItem->info = "Objednávka je uložena, děkujeme za nákup v našem e-shopu.";
-header('Location: /');  
-exit;

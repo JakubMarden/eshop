@@ -1,4 +1,7 @@
 <?php
+
+namespace FrontendModule;
+
 /**
  * CartItemController obsluhuje zmenu dat v kosiku u jedne polozky
  *
@@ -19,23 +22,25 @@ class CartItemController extends BaseController
     
      /** @var string obsahuje info z jake stranky data prisla. */
     public $source;
-        
+ 
+    public function __construct() {
+        parent::__construct();
+    }
        
     /**
     * dela samotnou zmenu v kosiku
     */
-    protected function init()
-    {
-        
-        $this->quantity = intval($this->data['quantity']);
-        $this->id = intval($this->data['id']);        
+    public function changeInCart()
+    {      
+        $this->quantity = intval($this->post_data['quantity']);
+        $this->id = intval($this->post_data['id']);        
         
         //odebrani z kosiku
         if($this->quantity === 0)
         {
             unset($_SESSION["cart_products"][$this->id]);
-            $this->info = "Produkt byl odebrán z košíku.";
-            header('Location: /kosik/');
+            $this->info = $_SESSION['info'] = "Produkt byl odebrán z košíku.";
+            $this->redirect('kosik/');
             exit;
         }            
         
@@ -49,22 +54,19 @@ class CartItemController extends BaseController
         }   
         
         $_SESSION["cart_products"][$this->id]["quantity"] = $this->quantity;
-        $this->source = $this->data['source']; 
+        $this->source = $this->post_data['source']; 
         
-        if($this->data['source'] === "kosik")
+        if(($this->source === "kosik") or ($this->source === "cart"))
+        {
             $this->info = "Počet byl upraven.";
+            $_SESSION['info'] = $this->info;
+            $this->redirect('kosik/');
+        }
         else
+        {    
             $this->info = "Produkt byl přidán do košíku.";
+            $_SESSION['info'] = $this->info; 
+            $this->redirect('/'); 
+        }                    
     }
 }
-
-$cart_item = new CartItemController();
-
-$_SESSION["info"] = $cart_item->info;
-
-if($cart_item->source === "kosik")
-    header('Location: /kosik/');     
-else
-    header('Location: /');  
-
-exit;

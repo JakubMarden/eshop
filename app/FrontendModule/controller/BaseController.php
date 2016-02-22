@@ -26,12 +26,12 @@ abstract class BaseController
     public $info;
        
     public function __construct() {
-        @session_start();
-        //require(dirname(__FILE__).'/../../model/'.'DatabaseModel.php'); 
+        @session_start(); 
         self::$db = \DatabaseModel::__getInstance();
         $this->post_data = filter_input_array(INPUT_POST);
-        if($this->post_data)
+        if($this->post_data){
             $this->csrfCheck();
+        }
     }
     
     /**
@@ -39,16 +39,12 @@ abstract class BaseController
     */
     protected function csrfCheck()
     {
-        if((intval($this->data["csrf_token"]) !== $_SESSION["csrf_token"]) or (!empty($this->data['e-mail']))) 
+        if((intval($this->post_data["csrf_token"]) !== $_SESSION["csrf_token"]) or (!empty($this->post_data['e-mail']))) 
         {       
             $this->info = ".Akce se nepovedla, prosím obnovte stránku a zkuste to znovu."; 
-            header('Location: /');
-            exit;
+            $this->redirect('/');
         }
-        else 
-        {
-            $this->init();  
-        }           
+
     }
      
     
@@ -64,7 +60,7 @@ abstract class BaseController
         if (!isset($_SESSION["csrf_token"])) {
             $_SESSION["csrf_token"] = rand(1, 1e9);
         }
-                
+        
         if ($this->view)
         {
             $this->view_data["view"] = $this->view;
@@ -76,9 +72,8 @@ abstract class BaseController
         }
     }
     
-    public function redirect($url) {
-        $router = new Router($url);
-        $router->redirect();
+    protected function redirect($url) {
+        $router = new \Router();
+        $router->redirect($url);
     }
 }
-

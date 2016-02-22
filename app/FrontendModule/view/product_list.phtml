@@ -1,4 +1,4 @@
-<div class = "fright"><a href = "kosik/" title ="přejít do košíku">Košík</a></div>
+<div class = "fright"><a href = "/kosik/" title ="přejít do košíku">Košík</a></div>
 <h2>Produkt list</h2>
 <table>
     <thead>
@@ -16,7 +16,7 @@
                 <td><?php echo $product["name"] ?></td>
                 <td><?php echo $product["price"] ?></td>
                 <td><?php echo $product["mount"] ?></td>
-                <td><?php echo "<a href = \" /detail/$product[id]\">detail produktu</a>" ?></td>
+                <td><?php echo "<a href = \"/product/detail/$product[id]\">detail produktu</a>" ?></td>
                 <td>    
                     <?php include('/../../forms/cartItemUpdateForm.phtml')?>
                 </td>

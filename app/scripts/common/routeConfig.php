@@ -2,6 +2,8 @@
 
 $routeArray = 
 [
-"kosik-polozka" => "cartItemController"    
+"kosik"  => "cart",  
+"kosik-polozka/zmena" => "cartItem/changeInCart",
+"objednavka" => "orderItem"    
 ];
 

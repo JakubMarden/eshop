@@ -7,7 +7,7 @@ namespace FrontendModule;
  *
  * @author vizus.jestrab
  */
-class HomeController extends BaseController{
+class CartController extends BaseController{
     
     public function __construct() {
         parent::__construct();
@@ -15,8 +15,7 @@ class HomeController extends BaseController{
     
     public function actionDefault()
     {
-        $this->view = 'product_list';
-        $this->view_data['products'] = parent::$db->getAllActive("product");
+        $this->view = 'cart';
         $this->renderView();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-
+namespace FrontendModule;
 /**
  * Description of ErrorController
  *
@@ -11,18 +11,20 @@ class ErrorController extends BaseController
 {
     public function __construct() {
         parent::__construct();
-
     }
     
-   public function error($id)
+   public function error($params)
    {
-       if($id === 404){
-       header("HTTP/1.0 404 Not Found");    
-       }
+        $id = intval($params[0]);
+        if($id === 404){
+            header("HTTP/1.0 404 Not Found");    
+        }
         // Hlavička stránky
-        $this->data['title'] = "Chyba $id";
+        $this->view_data['title'] = "Chyba $id";
         // Nastavení šablony
         $this->view = 'error_'.$id;
+        
+        $this->renderView();
    }
     
 }
