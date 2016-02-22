@@ -1,0 +1,6 @@
+RewriteEngine on
+RewriteRule    "^detail/(.*)"    "index.php?detail_id=$1"
+RewriteRule    "^kosik/"         "index.php?cart_detail=1"
+RewriteRule    "^kosik-polozka/"    "cartItem.php"
+RewriteRule    "^objednavka/"    "orderItem.php"
+

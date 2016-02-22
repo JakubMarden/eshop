@@ -1,0 +1,41 @@
+body
+{
+	background-color: #fff;
+}
+
+a.cms-editor-link {}
+a.cms-editor-link-anchor {}
+a.cms-editor-link-email {}
+a.cms-editor-link-web {}
+a.cms-editor-link-page {}
+a.cms-editor-link-image {}
+a.cms-editor-link-file[class*="file16-"]
+{
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 19px;
+}
+a.cms-editor-link-file[class*="file64-"]
+{
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-position: center 6px;
+	min-width: 76px;
+	max-width: 96px;
+	padding-top: 76px;
+	text-align: center;
+}
+
+table.cms-editor-table {}
+table.cms-editor-table.highlighted {}
+table.cms-editor-table.invisible {}
+
+img.cms-editor-image {}
+img.cms-image-type-0 {}
+
+div.cms-editor-video {}
+div.cms-editor-audio {}
+div.cms-editor-flash {}
+div.cms-editor-html {}
+div.cms-editor-exec {}

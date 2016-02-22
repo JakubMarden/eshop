@@ -1,0 +1,189 @@
+/* ========================================================================= */
+/* FONTS */
+/* ========================================================================= */
+
+@font-face
+{
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url(notosans-normal-400.eot);
+  src: local('Noto Sans'), local('NotoSans'), url(notosans-normal-400.eot) format('embedded-opentype'), url(notosans-normal-400.woff) format('woff');
+}
+
+@font-face
+{
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: url(notosans-normal-700.eot);
+  src: local('Noto Sans Bold'), local('NotoSans-Bold'), url(notosans-normal-700.eot) format('embedded-opentype'), url(notosans-normal-700.woff) format('woff');
+}
+
+@font-face
+{
+  font-family: 'Noto Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: url(notosans-italic-400.eot);
+  src: local('Noto Sans Italic'), local('NotoSans-Italic'), url(notosans-italic-400.eot) format('embedded-opentype'), url(notosans-italic-400.woff) format('woff');
+}
+
+@font-face
+{
+  font-family: 'Noto Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: url(notosans-italic-700.eot);
+  src: local('Noto Sans Bold Italic'), local('NotoSans-BoldItalic'), url(notosans-italic-700.eot) format('embedded-opentype'), url(notosans-italic-700.woff) format('woff');
+}
+
+/* ========================================================================= */
+/* TAGS */
+/* ========================================================================= */
+
+*
+{
+	font-family: 'Noto Sans', sans-serif;
+}
+
+body
+{
+	margin: 18px;
+	padding: 0;
+	font-size: 13px;
+	background-color: #f7f7f7;
+}
+
+h1
+{
+	font-size: 22px;
+	font-weight: normal;
+	color: #dc2500;
+	margin: 0 0 12px 0;
+}
+
+h2
+{
+	font-size: 20px;
+	font-weight: normal;
+	color: #dc2500;
+	margin: 0 0 9px 0;
+}
+
+h3
+{
+	font-size: 18px;
+	font-weight: normal;
+	color: #0066cc;
+	margin: 0 0 6px 0;
+}
+
+h4
+{
+	font-size: 16px;
+	font-weight: bold;
+	color: #0066cc;
+	margin: 0 0 6px 0;
+}
+
+h5
+{
+	font-size: 14px;
+	font-weight: bold;
+	color: #303030;
+	margin: 0 0 3px 0;
+}
+
+h6
+{
+	font-size: 13px;
+	font-weight: bold;
+	color: #303030;
+	margin: 0 0 3px 0;
+}
+
+p
+{
+	margin-top: 0;
+	margin-bottom: 12px;
+}
+
+ul
+{
+	list-style-type: square;
+	margin-top: 0;
+	margin-bottom: 12px;
+}
+
+ol
+{
+	margin-top: 0;
+	margin-bottom: 12px;
+}
+
+img
+{
+	border: none;
+}
+
+a
+{
+	color: #000;
+	outline: none;
+}
+
+a:hover
+{
+	color: #e52e00;
+}
+
+table
+{
+	border-spacing: 0;
+}
+
+td, th
+{
+	empty-cells: show;
+}
+
+/* ========================================================================= */
+/* EDITOR */
+/* ========================================================================= */
+
+a.cms-editor-link {}
+a.cms-editor-link-anchor {}
+a.cms-editor-link-email {}
+a.cms-editor-link-web {}
+a.cms-editor-link-page {}
+a.cms-editor-link-image {}
+a.cms-editor-link-file[class*="file16-"]
+{
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 19px;
+}
+a.cms-editor-link-file[class*="file64-"]
+{
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-position: center 6px;
+	min-width: 76px;
+	max-width: 96px;
+	padding-top: 76px;
+	text-align: center;
+}
+
+table.cms-editor-table {}
+table.cms-editor-table.highlighted {}
+table.cms-editor-table.invisible {}
+
+img.cms-editor-image {}
+
+div.cms-editor-video {}
+div.cms-editor-audio {}
+div.cms-editor-flash {}
+div.cms-editor-html {}
+div.cms-editor-exec {}

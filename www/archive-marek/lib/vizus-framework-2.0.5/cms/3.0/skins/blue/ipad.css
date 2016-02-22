@@ -1,0 +1,6 @@
+/* iPad CSS fixes */
+body.main > div.module, div.form-html div.preview, body.editor div.mce-edit-area > iframe
+{
+	-webkit-overflow-scrolling: touch !important;
+	overflow: scroll !important;
+}

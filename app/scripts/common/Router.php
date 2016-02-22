@@ -51,11 +51,18 @@ class Router
                 $instance->$method();                
             }
             else
+            {
+                $log = "Nenalezena metoda :$method - v controlleru - " .$controller_class_name;
+                new Log($log);
                 $this->redirect('error/error/404'); 
+            }    
         }
         else
+        {
+            $log = "Nenalezen Controller - " .$controller_class_name ." v modulu - " .$this->module;
+            new Log($log);
             $this->redirect('error/error/404'); 
-
+        }
     }        
     
     private function setComponents($choppedUrl)
@@ -63,8 +70,8 @@ class Router
         $directoryAdmin = (CONFIG_PHP_ROOT.$this->directoryAdminName);    
         $directoryFrontend = CONFIG_PHP_ROOT.$this->directoryFrontendName;
         $firstWord = $this->stringToCamelCase($choppedUrl[0]);
-        
-        if(($firstWord = "Admin") and (is_dir($directoryAdmin) === true))
+                    
+        if(($firstWord === "Admin") and (is_dir($directoryAdmin) === true))
         {
             $this->module = $this->directoryAdminName ."\\";
             array_shift($choppedUrl);
@@ -77,8 +84,10 @@ class Router
         {
             $this->module = "";
         }
-        
-        $choppedUrl = $this->checkRouteRedirect($choppedUrl);
+
+        if(!empty($choppedUrl)){
+            $choppedUrl = $this->checkRouteRedirect($choppedUrl);
+        }
         
         $this->controller = $this->stringToCamelCase(array_shift($choppedUrl)) . 'Controller';
         if($this->controller === "Controller")

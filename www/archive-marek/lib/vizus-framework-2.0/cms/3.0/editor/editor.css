@@ -1,0 +1,29 @@
+body.editor
+{
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: #f7f7f7;
+}
+
+body.editor > textarea.editor
+{
+	width: 100%;
+	height: 100%;
+}
+
+body.editor div.mce-tinymce
+{
+	border: none;
+}
+
+body.editor div.mce-edit-area
+{
+	background: #f0f0f0;
+}
+
+body.editor div.mce-flow-layout-item
+{
+	margin: 1px;
+}

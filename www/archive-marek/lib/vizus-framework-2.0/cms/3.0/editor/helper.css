@@ -1,0 +1,92 @@
+html
+{
+	margin: 0 6px 0 6px !important;
+	padding: 0 !important;
+	border: none !important;
+	background-color: #f0f0f0 !important;
+}
+
+body
+{
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	margin: 6px auto 6px auto !important;
+	min-height: 18px !important;
+	padding: 0 !important;
+	border: 1px dashed #c0c0c0 !important;
+}
+
+div.cms-editor-noneditable
+{
+	overflow: hidden;
+	color: #ff3700;
+	background-color: #ffe58c;
+	font: bold 13px/18px sans-serif;
+}
+
+div.cms-editor-html-helper, div.cms-editor-flash-helper, div.cms-editor-exec-helper
+{
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 6px;
+	border: 1px dashed #ff3700;
+	overflow: hidden;
+}
+
+div.cms-editor-html-helper > h3, div.cms-editor-flash-helper > h3, div.cms-editor-exec-helper > h3, div.cms-editor-exec-helper > h4
+{
+	font: bold 13px/18px sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+div.cms-editor-html-helper > pre, div.cms-editor-flash-helper > pre, div.cms-editor-exec-helper > pre
+{
+	font: normal 13px/16px consolas, monospace;
+	margin: 6px 0 0 0;
+	padding: 0;
+	color: #666;
+}
+
+div.cms-editor-audio-helper
+{
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	width: 320px;
+	height: 20px;
+	padding-left: 6px;
+	border: 1px dashed #ff3700;
+	overflow: hidden;
+}
+
+div.cms-editor-audio-helper > h3
+{
+	font: bold 13px/18px sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+div.cms-editor-video-helper
+{
+	position: relative;
+	width: 320px;
+	height: 260px;
+	overflow: hidden;
+}
+
+div.cms-editor-video-helper > h3
+{
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	padding: 6px;
+	margin: 0;
+	color: #fff;
+	background: url(play.png) no-repeat center center;
+	font: bold 14px/20px sans-serif;
+}

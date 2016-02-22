@@ -1,0 +1,57 @@
+/* Image viewer */
+iframe.cms-viewer
+{
+	position: fixed;
+	width: 320px;
+	height: 240px;
+	z-index: 50001;
+	margin: 20px;
+	padding: 0;
+	background: #e0e0e0;
+	border: 10px solid #e0e0e0;
+	overflow: hidden;
+}
+
+div.cms-viewer-wait
+{
+	position: fixed;
+	width: 128px;
+	height: 128px;
+	z-index: 50002;
+	background: url(wait.png) no-repeat;
+}
+
+div.cms-viewer-overlay
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 50000;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: 0.75;
+}
+
+/* Obsah */
+a.cms-editor-link-file[class*="file16-"]
+{
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 19px;
+}
+a.cms-editor-link-file[class*="file64-"]
+{
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-position: center 6px;
+	min-width: 76px;
+	max-width: 96px;
+	padding-top: 76px;
+	text-align: center;
+}
+a.cms-editor-link-file.filesize:after
+{
+	content: " (" attr(data-filesize) ")";
+}
