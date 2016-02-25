@@ -24,14 +24,15 @@ abstract class BaseController
     
     /** @var string hlaska, ktera bude zobrazena zakaznikovi. */
     public $info;
+    
+    protected $user;
        
     public function __construct() {
         @session_start(); 
         self::$db = \DatabaseModel::__getInstance();
-        $this->post_data = filter_input_array(INPUT_POST);
-        if($this->post_data){
-            $this->csrfCheck();
-        }
+        $this->user = new \User;
+        if (!$this->user->isLoggedIn()) 
+            $this->redirect('/admin/prihlaseni/login');
     }
     
     /**
@@ -41,14 +42,14 @@ abstract class BaseController
     {
         if((intval($this->post_data["csrf_token"]) !== $_SESSION["csrf_token"]) or (!empty($this->post_data['e-mail']))) 
         {       
-            $this->info = "Akce se nepovedla, prosím obnovte stránku a zkuste to znovu."; 
-            $log = "Nerovnost tokenu :post_data - " .$this->post_data['csrf_token'] ."session - " .$_SESSION['csrf_token'];
-            new Log($log);
-            $this->redirect('/');
+            return false;
+        }
+        else 
+        {
+            return true;
         }
     }
-     
-    
+   
     public function renderView()
     {
         //$_SESSION["info"] zobrazuje vysledek operaci, paklize se nejake udaly
@@ -73,8 +74,12 @@ abstract class BaseController
         }
     }
     
-    protected function redirect($url) {
-        $router = new \Router();
-        $router->redirect($url);
+    protected function redirect($url, $statusCode = 303) {
+        header('Location: ' . $url, true, $statusCode);
+        die();
+    }
+    
+    public function logout(){
+        $this->redirect('/admin/prihlaseni/logout');
     }
 }

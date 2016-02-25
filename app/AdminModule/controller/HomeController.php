@@ -16,7 +16,7 @@ class HomeController extends BaseController{
     public function actionDefault()
     {
         $this->view = 'product_list';
-        $this->view_data['products'] = parent::$db->getAllActive("product");
+        $this->view_data['user'] = parent::$db->getAllActive("user");
         $this->renderView();
     }
 }

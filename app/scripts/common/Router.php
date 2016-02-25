@@ -37,7 +37,7 @@ class Router
         $controller_class_name = ($this->module .$this->controller);
         $controller_path = CONFIG_PHP_ROOT .$this->module .'controller/' . $this->controller . '.php';
         $method = $this->method;
-        
+
         if (file_exists($controller_path))
         {
             $instance = new $controller_class_name();
@@ -120,10 +120,20 @@ class Router
             if($choppedUrl[0] === $choppedKeyUrl[0])
             {                          
                 $keyLenght = count($choppedKeyUrl);
-
+                $rewrite_signal = false;
+                
                 for($i = 0; $i < $keyLenght; $i++)
                 {
                    if($choppedUrl[$i] === $choppedKeyUrl[$i])
+                       $rewrite_signal = true;
+                   else {
+                       $rewrite_signal = false;
+                   }
+                }
+                
+                for($i = 0; $i < $keyLenght; $i++)
+                {
+                   if($rewrite_signal === true)
                        $choppedUrl[$i] = $choppedValueUrl[$i];
                 }
             }

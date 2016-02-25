@@ -105,8 +105,49 @@ class DatabaseModel
         }
     }
     
+   /**
+    *  metoda pro hledani konkretniho uzivatele
+    * @param    string   $table nazev tabulky
+    * @param    id   $id
+    * @return   $array
+    */
+    public function getUser($username)
+    {
+        try{
+            $this->stmt = $this->db->prepare("SELECT * FROM `user` WHERE username = :username AND active=1");
+            $this->stmt->execute(array(":username"=>$username));
+            return $result = $this->stmt->fetch(PDO::FETCH_ASSOC);
+        } 
+        
+        catch (PDOException $e)
+        {
+            $this->error = $e->getMessage(); 
+            return false;
+        }
+    }
+    
     /**
     *  metoda pro vraceni cele tabulky
+    * @param    string   $table nazev tabulky
+    * @return   $array
+    */
+    public function getAll($table)
+    {
+        try{
+            $this->stmt = $this->db->prepare("SELECT * FROM `{$table}`");
+            $this->stmt->execute();
+            return $result = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+        } 
+        
+        catch (PDOException $e)
+        {
+            $this->error = $e->getMessage(); 
+            return false;
+        }
+    }
+    
+    /**
+    *  metoda pro vraceni cele tabulky s aktivnimi polozkami
     * @param    string   $table nazev tabulky
     * @return   $array
     */
