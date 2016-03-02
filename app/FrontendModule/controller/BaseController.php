@@ -27,10 +27,17 @@ abstract class BaseController
        
     public function __construct() {
         @session_start(); 
-        self::$db = \DatabaseModel::__getInstance();
+        self::$db = \DatabaseModel::getInstance();
         $this->post_data = filter_input_array(INPUT_POST);
+        
         if($this->post_data){
             $this->csrfCheck();
+            $this->post_data = $this->validateInput($this->post_data);
+        }
+        
+        $get_data = filter_input_array(INPUT_GET);
+        if($get_data){
+            $get_data = $this->validateInput();
         }
     }
     
@@ -44,7 +51,21 @@ abstract class BaseController
             $this->info = ".Akce se nepovedla, prosím obnovte stránku a zkuste to znovu."; 
             $this->redirect('/');
         }
-
+    }
+    
+    /**
+    * ochrana proti sql injection atp
+    */
+    protected function validateInput($data_input)
+    {
+        foreach($data_input as $key => $data)
+        {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            $data_input[$key] = $data;
+        }
+        return $data_input;
     }
      
     
@@ -70,6 +91,37 @@ abstract class BaseController
             if(file_exists($main_template))
                 require_once($main_template);     
         }
+    }
+    
+    protected function initPagination($source,$limit,$params)
+    {
+        if(isset($params[0]))
+        {
+            $params['page'] = $params[0];
+        }
+        
+        if(isset($this->post_data['sort']))
+        {            
+            $order = explode('_',$this->post_data['sort']);
+            $params['order_by'] = $_SESSION['order_by'] = $order[0];
+            $params['order_direction'] = $_SESSION['order_direction'] = $order[1];
+        }
+        elseif (isset($_SESSION['order_by'])) 
+        {
+            $params['order_by'] = $_SESSION['order_by'];
+            $params['order_direction'] = $_SESSION['order_direction'];
+        }
+            
+        $pagination = new \Pagination();
+        $data = $pagination->getData($source,$limit, $params);
+        
+        if($pagination->total > $pagination->limit)
+        {
+            $this->view_data['pagination_count'] = intval(ceil($pagination->total / $pagination->limit));
+            $this->view_data['pagination_actual_page'] = $pagination->page;            
+        }
+
+        return $data;
     }
     
     protected function redirect($url) {

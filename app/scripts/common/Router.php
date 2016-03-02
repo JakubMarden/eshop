@@ -37,7 +37,7 @@ class Router
         $controller_class_name = ($this->module .$this->controller);
         $controller_path = CONFIG_PHP_ROOT .$this->module .'controller/' . $this->controller . '.php';
         $method = $this->method;
-
+        
         if (file_exists($controller_path))
         {
             $instance = new $controller_class_name();
@@ -54,14 +54,14 @@ class Router
             {
                 $log = "Nenalezena metoda :$method - v controlleru - " .$controller_class_name;
                 new Log($log);
-                $this->redirect('error/error/404'); 
+                $this->showError(); 
             }    
         }
         else
         {
             $log = "Nenalezen Controller - " .$controller_class_name ." v modulu - " .$this->module;
             new Log($log);
-            $this->redirect('error/error/404'); 
+            $this->showError(); 
         }
     }        
     
@@ -70,7 +70,7 @@ class Router
         $directoryAdmin = (CONFIG_PHP_ROOT.$this->directoryAdminName);    
         $directoryFrontend = CONFIG_PHP_ROOT.$this->directoryFrontendName;
         $firstWord = $this->stringToCamelCase($choppedUrl[0]);
-                    
+         
         if(($firstWord === "Admin") and (is_dir($directoryAdmin) === true))
         {
             $this->module = $this->directoryAdminName ."\\";
@@ -113,37 +113,46 @@ class Router
     private function checkRouteRedirect($choppedUrl)
     { 
         include(CONFIG_PHP_ROOT .'scripts/common/routeConfig.php');
-        
+
         foreach ($routeArray as $key => $value) {
             $choppedKeyUrl = explode("/", $key);
             $choppedValueUrl = explode("/", $value);
-            if($choppedUrl[0] === $choppedKeyUrl[0])
-            {                          
-                $keyLenght = count($choppedKeyUrl);
-                $rewrite_signal = false;
-                
-                for($i = 0; $i < $keyLenght; $i++)
-                {
-                   if($choppedUrl[$i] === $choppedKeyUrl[$i])
-                       $rewrite_signal = true;
-                   else {
-                       $rewrite_signal = false;
-                   }
-                }
-                
-                for($i = 0; $i < $keyLenght; $i++)
-                {
-                   if($rewrite_signal === true)
-                       $choppedUrl[$i] = $choppedValueUrl[$i];
-                }
-            }
-        }
+                        
+            $keyLenght = count($choppedKeyUrl);
+            $rewrite_signal = true;
 
+            for($i = 0; $i < $keyLenght; $i++)
+            {
+                if($choppedUrl[$i] !== $choppedKeyUrl[$i])
+                {
+                    $rewrite_signal = false;
+                    break;    
+                }
+                   
+            }
+            
+            if($rewrite_signal === true)
+            {
+                for($i = 0; $i < $keyLenght; $i++)
+                {
+                    $choppedUrl[$i] = $choppedValueUrl[$i];
+                }
+            }    
+        }
         return $choppedUrl;
     }
     
     public function redirect($url)
     {
         $this->route($url);
+    }
+    
+    public function showError()
+    {
+        if(file_exists( CONFIG_PHP_ROOT.$this->directoryFrontendName .'/controller/errorController.php')) 
+            $this->redirect('error/error/404'); 
+        else
+            header('HTTP/1.1 404 Not Found', true, 404);
+            exit();
     }
 }

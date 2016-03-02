@@ -1,0 +1,11 @@
+<form action="" method="post">
+    <label for="sort">Řadit dle: </label>
+    <select name="sort">
+        <?php foreach($sort as $key => $value){ ?>
+            <option value = "<?php echo $key;  ?>"><?php echo $value;  ?></option>
+        <?php } ?>
+    </select>        
+        <input type='hidden' name='csrf_token' value='<?php echo $_SESSION["csrf_token"]; ?>' />
+        <div class ="nor"><label for ="e-mail">nevyplňujte prosím: </label><input type="text" name="e-mail" value=""></div>
+        <input type="submit" value="Seřadit"/> 
+</form>

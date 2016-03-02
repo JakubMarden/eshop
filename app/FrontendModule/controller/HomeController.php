@@ -13,10 +13,12 @@ class HomeController extends BaseController{
         parent::__construct();
     }
     
-    public function actionDefault()
+    public function actionDefault($params = null)
     {
         $this->view = 'product_list';
-        $this->view_data['products'] = parent::$db->getAllActive("product");
+        $params['active'] = 1;
+        $this->view_data['sort'] = array('name_asc' => 'název produktu a-z', 'name_desc' => 'název produktu z-a', 'price_asc' => 'cena od nejlevnějšího','price_desc' => 'cena od nejdražšího');
+        $this->view_data['products'] = $this->initPagination('product',2, $params);
         $this->renderView();
     }
 }

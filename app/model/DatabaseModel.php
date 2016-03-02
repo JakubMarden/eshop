@@ -55,7 +55,7 @@ class DatabaseModel
         }
     }
     
-    public static function __getInstance()
+    public static function getInstance()
     {
       if(self::$instance === false){
         self::$instance = new DatabaseModel;
@@ -105,6 +105,33 @@ class DatabaseModel
         }
     }
     
+    
+    /**
+    *  metoda pro zjisteni poctu radku
+    * @param    string   $table nazev tabulky
+    * @param    array   $params
+    * @return   int
+    */
+    public function getCount($table, $params = null)
+    {
+        try{
+            $select = "SELECT * FROM `{$table}`";
+            if(isset($params['active'])){
+                $select .= "where is_active = " .$params['active'];
+            }
+            $this->stmt = $this->db->prepare($select);
+            $this->stmt->execute();
+            $count = $this->stmt->rowCount();
+            return $count;
+        } 
+        
+        catch (PDOException $e)
+        {
+            $this->error = $e->getMessage(); 
+            return false;
+        }
+    }
+    
    /**
     *  metoda pro hledani konkretniho uzivatele
     * @param    string   $table nazev tabulky
@@ -114,7 +141,7 @@ class DatabaseModel
     public function getUser($username)
     {
         try{
-            $this->stmt = $this->db->prepare("SELECT * FROM `user` WHERE username = :username AND active=1");
+            $this->stmt = $this->db->prepare("SELECT * FROM `user` WHERE username = :username AND is_active=1");
             $this->stmt->execute(array(":username"=>$username));
             return $result = $this->stmt->fetch(PDO::FETCH_ASSOC);
         } 
@@ -131,31 +158,33 @@ class DatabaseModel
     * @param    string   $table nazev tabulky
     * @return   $array
     */
-    public function getAll($table)
+    public function getAll($table,$limit = null,$offset = null,$params = null)
     {
+            
         try{
-            $this->stmt = $this->db->prepare("SELECT * FROM `{$table}`");
-            $this->stmt->execute();
-            return $result = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
-        } 
+            $select = "SELECT * FROM `{$table}`";
+            
+            if(isset($params['active'])){
+                $select .= " where is_active = " .$params['active'];
+            }
+            
+            if(!isset($params['order_direction']))
+            {
+                $params['order_direction'] = 'ASC';
+            }
         
-        catch (PDOException $e)
-        {
-            $this->error = $e->getMessage(); 
-            return false;
-        }
-    }
-    
-    /**
-    *  metoda pro vraceni cele tabulky s aktivnimi polozkami
-    * @param    string   $table nazev tabulky
-    * @return   $array
-    */
-    public function getAllActive($table)
-    {
-        try{
-            $this->stmt = $this->db->prepare("SELECT * FROM `{$table}` WHERE active=:active");
-            $this->stmt->execute(array(":active"=>1));
+            if(isset($params['order_by']))
+            {
+                $select .= " order by " .$params['order_by'] ." " .$params['order_direction'];
+            }
+            
+            if(isset($limit))
+            {
+                $select .= " limit " .$offset ."," .$limit;    
+            }
+            
+            $this->stmt = $this->db->prepare($select);
+            $this->stmt->execute();
             return $result = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
         } 
         
@@ -219,6 +248,42 @@ class DatabaseModel
             return false;
         }
     }
+    
+    /**
+    *  metoda pro zamknuti tabulky
+    */
+    public function lockTable($table)
+    {
+        try{
+            $this->stmt = $this->db->prepare("LOCK TABLES `{$table}`");
+            $this->stmt->execute();
+            return true;
+        } 
+        
+        catch (PDOException $e)
+        {
+            $this->error = $e->getMessage(); 
+            return false;
+        }
+    } 
+    
+    /**
+    *  metoda pro zamknuti tabulky
+    */
+    public function unlockTable($table)
+    {
+        try{
+            $this->stmt = $this->db->prepare("UNLOCK TABLES `{$table}`");
+            $this->stmt->execute();
+            return true;
+        } 
+        
+        catch (PDOException $e)
+        {
+            $this->error = $e->getMessage(); 
+            return false;
+        }
+    } 
     
     /**
     *  metoda pro ukonceni relace

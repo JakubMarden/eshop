@@ -29,10 +29,14 @@ abstract class BaseController
        
     public function __construct() {
         @session_start(); 
-        self::$db = \DatabaseModel::__getInstance();
+        self::$db = \DatabaseModel::getInstance();
         $this->user = new \User;
-        if (!$this->user->isLoggedIn()) 
+        $is_logged_in = $this->user->isLoggedIn();
+        
+        if ($is_logged_in === false)
+        { 
             $this->redirect('/admin/prihlaseni/login');
+        }
     }
     
     /**
@@ -72,6 +76,37 @@ abstract class BaseController
             if(file_exists($main_template))
                 require_once($main_template);     
         }
+    }
+    
+    protected function initPagination($source,$limit,$params)
+    {
+        if(isset($params[0]))
+        {
+            $params['page'] = $params[0];
+        }
+        
+        if(isset($this->post_data['sort']))
+        {            
+            $order = explode('_',$this->post_data['sort']);
+            $params['order_by'] = $_SESSION['user_order_by'] = $order[0];
+            $params['order_direction'] = $_SESSION['user_order_direction'] = $order[1];
+        }
+        elseif (isset($_SESSION['user_order_by'])) 
+        {
+            $params['order_by'] = $_SESSION['user_order_by'];
+            $params['order_direction'] = $_SESSION['user_order_direction'];
+        }
+            
+        $pagination = new \Pagination();
+        $data = $pagination->getData($source,$limit, $params);
+        
+        if($pagination->total > $pagination->limit)
+        {
+            $this->view_data['pagination_count'] = intval(ceil($pagination->total / $pagination->limit));
+            $this->view_data['pagination_actual_page'] = $pagination->page;            
+        }
+
+        return $data;
     }
     
     protected function redirect($url, $statusCode = 303) {

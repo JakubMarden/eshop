@@ -33,7 +33,7 @@ class User {
     
     public function authenticate(array $credentials)
     {
-        self::$db = \DatabaseModel::__getInstance();
+        self::$db = \DatabaseModel::getInstance();
         $username = $credentials['username'];
         $password = $credentials['password'];
         $row = self::$db->getUser($username);
@@ -48,7 +48,7 @@ class User {
             else 
             {
                 $_SESSION['username'] = $row['username'];
-                $_SESSION['rights'] = $row['rights_id'];             
+                $_SESSION['rights'] = $row['rights_level'];             
             }
         }
         else

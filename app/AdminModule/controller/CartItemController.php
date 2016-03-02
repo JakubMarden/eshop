@@ -12,10 +12,10 @@ class CartItemController extends BaseController
 {
     
     /** @var int id produktu. */
-    private $id;
+    protected $id;
     
     /** @var int mnozstvi objednavaneho produktu. */
-    private $quantity;
+    protected $quantity;
     
      /** @var string hlaska, ktera bude zobrazena zakaznikovi. */
     public $info;

@@ -14,7 +14,13 @@
     <body>
         <div id = header>
             <h1>Vizus E-shop Admin</h1><br />
-            <?php if(isset($_SESSION['username'])){?> <a href="/admin/prihlaseni/logout" title="odhhlásit y admina">odhlásit se</a> <?php }?>
+            <?php if(isset($_SESSION['username'])){?> 
+                <ul>
+                    <li><a href="/admin/product/" title="administrace produktů">produkty</a></li>
+                    <li><a href="/admin/user/" title="administrace uživatelů">uživatelé</a></li>
+                </ul>    
+                <a href="/admin/prihlaseni/logout" title="odhhlásit z admina">odhlásit se</a> 
+            <?php }?>
             <div id = "info"><p><?php if(isset($info)) echo $info; ?></p></div>
         </div>            
             <div class = "w100" id = "main">

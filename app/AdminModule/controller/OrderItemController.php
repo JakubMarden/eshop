@@ -12,25 +12,25 @@ class OrderItemController extends BaseController
 {
     
     /** @var int id objednavky. */
-    private $id;
+    protected $id;
     
     /** @var array data o zakaznikovi. */
-    private $customer;
+    protected $customer;
     
     /** @var array data o objednavce jako takove. */
-    private $order;
+    protected $order;
     
     /** @var array data o produktech uvnitr objednavky. */
-    private $products;
+    protected $products;
     
     /** @var int cena za dopravu. */
-    private $shipping_price;
+    protected $shipping_price;
     
     /** @var int cena za platbu. */
-    private $payment_price;
+    protected $payment_price;
     
     /** @var int celkova cena. */
-    private $sum_price;
+    protected $sum_price;
 
     public function __construct() {
         parent::__construct();
@@ -50,7 +50,7 @@ class OrderItemController extends BaseController
         
         unset($_SESSION["cart_products"]);
         $_SESSION["info"] = $this->info = "Objednávka je uložena, děkujeme za nákup v našem e-shopu.";
-        $this->redirect('kosik/'); 
+        $this->redirect('/'); 
     }
     
     /**
@@ -58,8 +58,9 @@ class OrderItemController extends BaseController
      * 
     * @return   boolean
     */
-    private function insertCustomer()
+    protected function insertCustomer()
     {
+        parent::$db->lockTable("customer");
         $max_id  = parent::$db->getMaxId("customer");
         $max_id++;
 
@@ -75,6 +76,7 @@ class OrderItemController extends BaseController
         );
          
         $save_customer_result = parent::$db->insertRow("customer", $this->customer); 
+        parent::$db->unlockTable("customer");
         
         if($save_customer_result === false)
         {
@@ -88,8 +90,9 @@ class OrderItemController extends BaseController
      * 
     * @return   boolean
     */
-    private function insertOrder()
+    protected function insertOrder()
     {
+        parent::$db->lockTable("order");
         $max_id  = intval(parent::$db->getMaxId("order"));
         $max_id++;
               
@@ -106,6 +109,7 @@ class OrderItemController extends BaseController
         );
         
         $save_order_result = parent::$db->insertRow("order", $this->order); 
+        parent::$db->unlockTable("order"); 
         
         if($save_order_result === false)
         {
@@ -119,7 +123,7 @@ class OrderItemController extends BaseController
      * 
     * @return   boolean
     */
-    private function insertProductsInOrder()
+    protected function insertProductsInOrder()
     {
         foreach ($this->products as $value) 
         {
@@ -146,7 +150,7 @@ class OrderItemController extends BaseController
     /**
     * zjistuje a udrzuje cenu objednavky a naplnuje promennou produktu v objednavce
     */
-    private function setPricesAndProducts() 
+    protected function setPricesAndProducts() 
     {
         $this->shipping_price = 0;
         $this->payment_price = 0;

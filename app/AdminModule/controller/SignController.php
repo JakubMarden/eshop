@@ -26,7 +26,7 @@ class SignController extends BaseController
     {       
         $this->post_data = filter_input_array(INPUT_POST);
         $csrf_check = $this->csrfCheck();
-
+ 
         if(!empty($this->post_data) and ($csrf_check ===true))
         {
             try {

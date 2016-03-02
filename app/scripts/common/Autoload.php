@@ -27,18 +27,21 @@ class Autoload
                 $this->module = $this->module ."\\";
                 $this->class = implode($sliced_class);        
             }
-            else {
+            else 
+            {
                 $this->class = $input;       
             }
 
             if (preg_match('/Controller$/', $this->class))
-                require(CONFIG_PHP_ROOT .  $this->module ."controller\\" . $this->class . ".php");
+                $file =  CONFIG_PHP_ROOT .  $this->module ."controller\\" . $this->class . ".php";
             elseif(preg_match('/Model$/', $this->class))
-                require(CONFIG_PHP_ROOT ."model\\" . $this->class . ".php");
+                $file  = CONFIG_PHP_ROOT ."model\\" . $this->class . ".php"; 
             else
-                require(CONFIG_PHP_ROOT."/scripts/common/" . $this->class . ".php");
-        });
-    }
-    
+                $file  = CONFIG_PHP_ROOT."/scripts/common/" . $this->class . ".php"; 
+            
+            if(file_exists($file))
+                require_once($file);
+        });    
+    }    
 }
 new Autoload();
