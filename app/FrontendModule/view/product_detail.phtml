@@ -12,7 +12,7 @@ $image_file = "/photos/".$product['image_file'];
     <?php echo "cena: " .$product["price"] ?><br />
     <?php echo "daň: " .$product["vat"]."%" ?><br />
     <?php echo "množství v balení: " .$product["mount"] ?><br />
-    <?php if(file_exists($image_file)) echo "<img src = '$image_file' alt = 'obrázek produktu'/>" ?><br />
+    <?php if(file_exists(CONFIG_ROOT .$image_file)) echo "<img src = '$image_file' alt = 'obrázek produktu'/>" ?><br />
     
     <?php include(CONFIG_PHP_ROOT.'/forms/cartItemUpdateForm.phtml')?>
 </div>

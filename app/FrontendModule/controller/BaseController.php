@@ -3,7 +3,7 @@
 namespace FrontendModule;
 
 /**
- * Description of BaseController
+ * Zakladni kontroler s pomocnymi metodami a automatickym zabezpecenim
  *
  * @author vizus.jestrab
  */
@@ -68,7 +68,9 @@ abstract class BaseController
         return $data_input;
     }
      
-    
+    /**
+    * metoda pro zobrazeni pohledu
+    */
     public function renderView()
     {
         //$_SESSION["info"] zobrazuje vysledek operaci, paklize se nejake udaly
@@ -93,6 +95,13 @@ abstract class BaseController
         }
     }
     
+    /**
+    * metoda pro spusteni strankovani
+    * @param    string   $source nastavuje z jake tabulky se budou tahat strankvana data
+    * @param    int   $limit
+    * @param    array  $params
+    * @return   $array
+    */
     protected function initPagination($source,$limit,$params)
     {
         if(isset($params[0]))
@@ -124,6 +133,11 @@ abstract class BaseController
         return $data;
     }
     
+    /**
+    * funkce pro presmerovani
+    * @param    string   $url misto presmerovani
+    * @param    int $statusCode kod stranky k urceni typu presmerovani
+    */
     protected function redirect($url) {
         $router = new \Router();
         $router->redirect($url);

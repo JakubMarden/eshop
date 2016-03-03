@@ -9,6 +9,7 @@ namespace AdminModule;
  */
 class SignController extends BaseController
 {
+    /** @var instance prihlaseneho uzivatele. */
     public $user;
     
     public function __construct() 
@@ -16,12 +17,18 @@ class SignController extends BaseController
         @session_start();
     }
     
+    /**
+    * metoda pro zobrazeni prihlasovaciho formulare
+    */
     public function in()
     {
         $this->view = 'sign_in';
         $this->renderView();
     }
     
+    /**
+    * metoda pro prihlaseni uzivatele a nastaveni prav
+    */
     public function autenticate()
     {       
         $this->post_data = filter_input_array(INPUT_POST);
@@ -47,6 +54,9 @@ class SignController extends BaseController
         }    
     }
     
+    /**
+    * odhlaseni z admina
+    */
     public function logout()
     {
         unset($_SESSION['username']);

@@ -2,7 +2,7 @@
 
 
 /**
- * Resi strankovani
+ * Trida pro strankovani obsahu
  *
  * @author vizus.jestrab
  */
@@ -10,9 +10,17 @@ class Pagination {
     
     /** @var Database instance. */
     protected static $db;  
+    
+    /** @var string Nastavuje z jake tabulky se budou tahat strankvana data. */
     protected $source;
+    
+    /** @var int Nastavuje po kolika radcich se bude obsah delit. */
     public $limit;   
+    
+    /** @var string Obsahuje informaci, na jake strance aktualne je. */
     public $page;
+    
+    /** @var string udrzuje informaci o celkovem poctu dat k zobrazeni bez ohledu na limit. */
     public $total;
 
     public function __construct()
@@ -20,6 +28,13 @@ class Pagination {
         self::$db = \DatabaseModel::getInstance();
     }
     
+    /**
+    * metoda pro ziskani strankovanych dat
+    * @param    string   $source nastavuje z jake tabulky se budou tahat strankvana data
+    * @param    int   $limit nastavuje po kolika radcich se bude obsah delit
+    * @param    array  $params
+    * @return   $array
+    */
     public function getData($source, $limit, $params = null)
     {
         $this->limit   = intval($limit);

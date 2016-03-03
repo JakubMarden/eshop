@@ -1,4 +1,7 @@
 <?php
+/* 
+ * array pro prekladani adres
+ */
 
 $routeArray = 
 array
@@ -11,6 +14,5 @@ array
     "prihlaseni/potvrzeni"   => "sign/autenticate",
     "prihlaseni/login"   => "sign/in",
     "prihlaseni/logout"   => "sign/logout"
-
 );
 

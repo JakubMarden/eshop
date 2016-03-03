@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of Autoload
+ * Trida pro autoloadovani dalsich trid, kdyz se kdekoliv zavola new Trida
  *
  * @author vizus.jestrab
  */

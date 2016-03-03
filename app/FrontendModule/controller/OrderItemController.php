@@ -50,7 +50,7 @@ class OrderItemController extends BaseController
         
         unset($_SESSION["cart_products"]);
         $_SESSION["info"] = $this->info = "Objednávka je uložena, děkujeme za nákup v našem e-shopu.";
-        $this->redirect('kosik/'); 
+        $this->redirect('/'); 
     }
     
     /**

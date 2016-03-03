@@ -101,6 +101,8 @@ class DatabaseModel
         catch (PDOException $e)
         {
             $this->error = $e->getMessage(); 
+            
+            var_dump($this->stmt->queryString,$this->error, $pdo_array);exit;
             return false;
         }
     }
@@ -220,7 +222,7 @@ class DatabaseModel
     }
     
     /**
-    *  metoda pro vlozeni obshu do tabulky
+    * metoda pro vlozeni obsahu do tabulky
     * @param    string   $table nazev tabulky
     * @param    array   $array asociativni pole pro pridani hodnot
     * @return   boolean
@@ -244,7 +246,69 @@ class DatabaseModel
         {
             
             $this->error = $e->getMessage();
-            var_dump($this->stmt->queryString,$this->error, $pdo_array);exit;
+            new Log($this->stmt->queryString,$this->error, $pdo_array);
+            return false;
+        }
+    }
+    
+    /**
+    * metoda pro zmenu radku tabulky
+    * @param    string   $table nazev tabulky
+    * @param    array   $array asociativni pole pro pridani hodnot
+    * @param    int   $id id radku
+    * @return   boolean
+    */
+    public function updateRow($table, $array, $id)
+    {
+        $select = "";
+        foreach ($array as $key => $value) 
+        {
+            $select .= $key ." = :$key,";
+        }
+        $select = rtrim($select, ",");
+        
+        try{
+            $this->stmt = $this->db->prepare("UPDATE `{$table}` SET " .$select ." WHERE id=:id");
+            
+            foreach ($array as $key => $value) {
+                $new_key = ":".$key;
+                $pdo_array[$new_key] = $value;
+            }
+            $pdo_array[':id'] = $id; 
+            
+            $this->stmt->execute($pdo_array);
+            
+            return true;
+        } 
+        
+        catch (PDOException $e)
+        {
+            
+            $this->error = $e->getMessage();
+            new Log($this->stmt->queryString,$this->error, $pdo_array);
+            return false;
+        }
+    }
+    
+    /**
+    * metoda pro smazani radku tabulky
+    * @param    string   $table nazev tabulky
+    * @param    int   $id id radku
+    * @return   boolean
+    */
+    public function deleteRow($table, $id)
+    {
+        try{
+            $this->stmt = $this->db->prepare("DELETE FROM `{$table}`  WHERE id=:id");            
+            $this->stmt->execute(array(":id"=>$id));           
+            return true;
+        } 
+        
+        catch (PDOException $e)
+        {
+            
+            $this->error = $e->getMessage();
+            new Log($this->stmt->queryString,$this->error, $pdo_array);
             return false;
         }
     }

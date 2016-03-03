@@ -3,7 +3,7 @@
 namespace AdminModule;
 
 /**
- * Prvotni obrazovka stranek
+ * Prvotni obrazovka adminu
  *
  * @author vizus.jestrab
  */

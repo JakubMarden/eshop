@@ -1,14 +1,16 @@
 <?php
 
 /**
- * Description of User
+ * Trida zjistujici a udrzujici info o uzivateli, prihlasujicim se do adminu
  *
  * @author vizus.jestrab
  */
 class User {
     
+    /** @var string Obsahuje informaci o uzivatelskem jmene. */
     public $username;
-            
+    
+    /** @var string Obsahuje informaci o pravech daneho uzivatele. */
     public $rights;
     
     /** @var Database instance. */
@@ -19,6 +21,10 @@ class User {
         @session_start();
     }
     
+    /**
+    * metoda zjistovani, zda je uzivatel prihlasen
+    * @return   boolean
+    */
     public function isLoggedIn()
     {
         if((isset($_SESSION['username'])) AND (isset($_SESSION['rights'])))
@@ -31,6 +37,10 @@ class User {
             return false;
     }
     
+    /**
+    * metoda pro zjisteni, zda prihlasovany uzivatel ma pravo na vstup do admina
+    * @param    array   $credentials vyplnene udaje v prihlasovacim formulari
+    */
     public function authenticate(array $credentials)
     {
         self::$db = \DatabaseModel::getInstance();

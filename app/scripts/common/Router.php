@@ -3,19 +3,27 @@
 
 class Router
 {
+    /** @var string Obsahuje o volanem modulu. */
     private $module;
 
+    /** @var string Obsahuje informace o volanem kontroleru. */
     private $controller;
     
+    /** @var string Obsahuje informace o volane metode. */
     private $method;
 
+    /** @var string Obsahuje informace, vkladane do metody jako parametry. */
     private $parameters;
     
+    /** @var string Nastavuje nazev frontendove slozky aplikace. */
     private $directoryFrontendName = 'FrontendModule';
     
+    /** @var string astavuje nazev backendove slozky aplikace. */
     private $directoryAdminName = 'AdminModule';
     
-
+    /**
+    * iniciace routovani
+    */
     public function route($url)
     {
         $choppedUrl = $this->parseUrl($url); 
@@ -23,6 +31,11 @@ class Router
         $this->initRoute();
     }
     
+    /**
+    * 1.cast routy - rozseka url na komponenty a ocisti je
+    * @param    string   $url puvodni volana cesta
+    * @return   $choppedUrl array se zpracovanou cestou
+    */
     private function parseUrl($url)
     {
         $parsedUrl = parse_url($url);
@@ -32,6 +45,9 @@ class Router
         return $choppedUrl = explode("/", $parsedUrl["path"]);       
     }
     
+    /**
+    * konecna faze routy - zavolani prislusne tridy a jeji metody popr. presmerovani na error 404
+    */
     private function initRoute()
     {
         $controller_class_name = ($this->module .$this->controller);
@@ -65,6 +81,11 @@ class Router
         }
     }        
     
+    /**
+    * 2.faze routy - zjisteni jake casti url jsou moduly, kontrolery, metody a parametry,
+     * jejich nahrani do atributu instance Routy.
+    * @param    array   $choppedUrl rozsekana adresa url na jednotlive komponeny
+    */
     private function setComponents($choppedUrl)
     {   
         $directoryAdmin = (CONFIG_PHP_ROOT.$this->directoryAdminName);    
@@ -102,6 +123,11 @@ class Router
             $this->parameters = $choppedUrl;        
     }
     
+    /**
+    * pomocna metoda pro zmenu velikosti pismen nazvu jmena na velbloudi pismo
+    * @param    string   $text retezec, ktery bude zmenen
+    * @return   $name zmeneny retezec
+    */
     private function stringToCamelCase($text)
     {
         $name = str_replace('-', ' ', $text); 
@@ -110,6 +136,12 @@ class Router
         return $name;
     }
     
+    /**
+    * metoda pro kontrolu a prepsani cesty v pripade, ze dana cesta se ma presmerovat 
+     * v zavislosti na nastaveni v routeConfig array
+    * @param    array   $choppedUrl puvodni cesta, kam miri Router
+    * @return   $array s upravenou cestou
+    */
     private function checkRouteRedirect($choppedUrl)
     { 
         include(CONFIG_PHP_ROOT .'scripts/common/routeConfig.php');
@@ -142,11 +174,17 @@ class Router
         return $choppedUrl;
     }
     
+    /**
+    * metoda pro presmerovani na spravny kontroler
+    */
     public function redirect($url)
     {
         $this->route($url);
     }
     
+    /**
+    * metoda pro zobrazeni spravne chybove stranky a zamezeni tak cykleni presmerovai pripadnych chybejicich chybovych kotroleru
+    */
     public function showError()
     {
         if(file_exists( CONFIG_PHP_ROOT.$this->directoryFrontendName .'/controller/errorController.php')) 

@@ -2,7 +2,7 @@
 $image_file = "/photos/".$product['image_file'];
 ?>  
 
-<div class = "fright"><a href = "/kosik/" title ="přejít do košíku">Košík</a></div>
+<div class = "fright"><a href = "/admin/product/" title ="zpět na list">Zpět na list</a></div>
 <h2>Detail produktu</h2>
 <div>
     <?php echo "produkt kód: " .$product["id"] ?><br />
@@ -11,8 +11,6 @@ $image_file = "/photos/".$product['image_file'];
     <?php echo "cena: " .$product["price"] ?><br />
     <?php echo "daň: " .$product["vat"]."%" ?><br />
     <?php echo "množství v balení: " .$product["mount"] ?><br />
-    <?php if(file_exists($image_file)) echo "<img src = '$image_file' alt = 'obrázek produktu'/>" ?><br />
-    
-    <?php include(CONFIG_PHP_ROOT.'/forms/cartItemUpdateForm.phtml')?>
+    <?php if(file_exists(CONFIG_ROOT .$image_file)) echo "<img src = '$image_file' alt = 'obrázek produktu'/>" ?><br />
 </div>
 

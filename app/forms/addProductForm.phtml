@@ -1,38 +1,28 @@
 <form method="post" action="" enctype="multipart/form-data">
-    <fieldset>
-        <legend>Osobní údaje:</legend>
-        <label for="name"><strong>*Jméno: </strong></label><input type="text" name="name" pattern="^([\wá-žÁ-Ž\s \.])+$" autofocus="autofocus" required ><br />
-        <label for="surname"><strong>*Příjmení: </strong></label><input type="text" name="surname" pattern="^([\wá-žÁ-Ž\s \.])+$" autofocus="autofocus" required ><br />
-        <label for="email"><strong>*E-mail: </strong></label><input type="email" name="email" id = "email" required><br />
-        <label for="phone">Telefon: </label><input pattern="^(\+?(0{1,2})?(42)?0?)?\s?(([0-9]{3}[\s]?){3})$" type="text" name="phone"><br />
-    </fieldset>
-    <fieldset>
-        <legend>Doručovací adresa:</legend>
-        <label for="street"><strong>*Ulice: </strong></label><input type="text" name="street" pattern="^([\wá-žÁ-Ž\s\.\/\-])+$" required ><br />
-        <label for="city"><strong>*Město: </strong></label><input type="text" name="city" pattern="^([\wá-žÁ-Ž\s\.\/])+$" required ><br />
-        <label for="zip"><strong>*PSČ: </strong></label><input type="text" pattern="^([0-9\s])+$" name="zip" required ><br />   
-    </fieldset>
+    <label for="name"><strong>*Název produktu: </strong></label><input type="text" name="name" value="<?php if(isset($product['name'])){ echo $product['name']; } ?>" autofocus="autofocus" required ><br />
+    <label for="description">Popis: </label><input type="text" name="description" value="<?php if(isset($product['description'])){ echo $product['description']; } ?>" ><br />
+    <label for="price"><strong>*Cena: </strong></label><input type="text" name="price" value="<?php if(isset($product['price'])){ echo $product['price']; } ?>"  required><br />
+    <label for="vat"><strong>*Daň: </strong></label><input value="<?php if(isset($product['vat'])){ echo $product['vat']; } ?>"  type="text" name="vat" required><br />
+    <label for="mount">Množství v balení: </label><input value="<?php if(isset($product['mount'])){ echo $product['mount']; } ?>"  type="text" name="mount"><br />
     
-    <fieldset>
-        <legend>Info k objednávce:</legend>
-        
-        <label for="radio"><strong>*Doprava: </strong></label><br>
-        <input type="radio" name="shipping_method" value="self" required>Osobní vyzvednutí<br>
-        <input type="radio" name="shipping_method" value="delivery">Dobírka<br>
-        
-        <label for="radio"><strong>*Platba: </strong></label><br>
-        <input type="radio" name="payment_method" value="bank" required>Předem na účet<br>
-        <input type="radio" name="payment_method" value="cash">Na pobočce<br>
-        <input type="radio" name="payment_method" value="delivery">Dobírka<br>
-        
-        <label for="message">Poznámka k objednávce: </label><textarea name="message"></textarea>
-    </fieldset>
-    <div>
+    <label for="is_active">Aktivní: </label>
+    <select name="is_active">
+        <option value="1" <?php if(((isset($product['is_active'])) and ($product['is_active'] === 1)) or (!isset($product['is_active']))) { echo "selected"; } ?>>ano</option>
+        <option value="0" <?php if((isset($product['is_active'])) and ($product['is_active'] === 0)) { echo "selected"; } ?>>ne</option>
+    </select><br />    
+    
+    <?php if(isset($product['image_file'])){ 
+        echo "<img src = '/photos/" .$product['image_file'] ."' alt = 'současný obrázek produktu'><br />";
+        echo "<input value= '".$product['image_file'] .'\' type="hidden" name="image_file_old">';
+    } ?>
+   <label for="mount">(Pře)nahrát obrázek: </label><input type="file" name = "image_file" accept="image/*">
+    
+   <div>
         <input type='hidden' name='csrf_token' value='<?php echo $_SESSION["csrf_token"]; ?>' />
         <div class ="nor"><label for ="e-mail">nevyplňujte prosím: </label><input type="text" name="e-mail" value=""></div>
-        <input type="submit" value="Závazně objednat"/>
-        <input type="reset" value="Vyčistit"/>
+        <input type="submit" value="Uložit"/>
     </div>
+   
     <div><p>*Pole označená hvězdičkou jsou povinná</p></div>
 </form>
 
